@@ -32,9 +32,9 @@ async def count_symbols(message: types.Message, state: FSMContext):
     await state.reset_state()
 
 
-@dp.callback_query_handler(text='cancel')
+@dp.callback_query_handler(text='cancel', state='symbol_count1')
 async def start_count_symbols(call: CallbackQuery, state: FSMContext):
-    await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                text=f'⬇️ Пришлите <b>текст</b>, который нужно посчитать на символы ⬇️',
-                                reply_markup=keyboard_cancel)
-    await state.set_state('symbol_count1')
+    await bot.send_message(chat_id=call.from_user.id,
+                           text=f'❗️ Вы отменили подсчет символов!',
+                           reply_markup=text_actions_keyboard)
+    await state.reset_state()

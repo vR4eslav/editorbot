@@ -73,15 +73,8 @@ async def start_check(message: types.Message, state: FSMContext):
     await state.reset_state()
 
 
-@dp.callback_query_handler(state='CheckText.stage1', text='cancel')
-async def cancel_check_spelling(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_text(text=f'❗️ Вы отменили проверку на грамотность. ❗️\n\nЧто нужно сделать еще?',
-                                 reply_markup=keyboard_cancel)
-    await state.reset_state()
-
-
 @dp.callback_query_handler(state='CheckText.stage2', text='cancel')
 async def cancel_check_spelling1(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_text(text=f'Вы отменили проверку на грамотность. Что нужно сделать еще?',
-                                 reply_markup=keyboard_cancel)
+    await call.message.answer(text=f'❗️Вы отменили проверку на грамотность. \n\nЧто нужно сделать еще?',
+                              reply_markup=text_actions_keyboard)
     await state.reset_state()

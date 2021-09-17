@@ -71,8 +71,8 @@ async def change_register_final(call: CallbackQuery, state: FSMContext):
     await state.reset_state()
 
 
-@dp.callback_query_handler(state=ChangeRegister.stage1)
+@dp.callback_query_handler(state=ChangeRegister.stage1, text='cancel')
 async def cancer_register_change(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_text(f'❗️ Вы отменили смену регистра! \n\nЧто вы хотите сделать еще?',
-                                 reply_markup=text_actions_keyboard)
+    await call.message.answer(f'❗️ Вы отменили смену регистра! \n\nЧто вы хотите сделать еще?',
+                              reply_markup=text_actions_keyboard)
     await state.reset_state()

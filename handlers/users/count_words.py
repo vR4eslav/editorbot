@@ -1,6 +1,5 @@
 import re
 
-import keyboard as keyboard
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
@@ -45,6 +44,6 @@ async def counting_process(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(state=Counter.stage1, text='cancel')
 async def cancel_count(call: CallbackQuery):
     await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                text=f'Вы отменили подсчет слов! Что вы хотите сделать еще?',
+                                text=f'❗️Вы отменили подсчет слов! Что вы хотите сделать еще?',
                                 reply_markup=text_actions_keyboard)
 
