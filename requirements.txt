@@ -1,0 +1,7 @@
+aiogram~=2.12
+environs~=8.0.0
+pip~=21.2.4
+uuid~=1.30
+setuptools~=41.2.0
+pyenchant~=3.2.1
+loguru
