@@ -75,6 +75,7 @@ async def start_check(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state='CheckText.stage2', text='cancel')
 async def cancel_check_spelling1(call: CallbackQuery, state: FSMContext):
-    await call.message.answer(text=f'❗️Вы отменили проверку на грамотность. \n\nЧто нужно сделать еще?',
-                              reply_markup=text_actions_keyboard)
+    await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
+                                text=f'❗️Вы отменили проверку орфографии! Что вы хотите сделать еще?',
+                                reply_markup=text_actions_keyboard)
     await state.reset_state()
