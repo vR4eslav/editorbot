@@ -1,6 +1,7 @@
 from aiogram import types
 from aiogram.types import CallbackQuery
 
+from data import config
 from loader import dp
 
 
@@ -17,5 +18,5 @@ async def cq_about(call: CallbackQuery):
                                        f"Посчитать символы в тексте\n"
                                        f"Поменять регистр сообщения\n"
                                        f"Проверить текст на орфографию\n\n"
-                                       f"⚠️Возникли трудности или предложения — пиши: support@text.ru",
+                                       f"⚠️Возникли трудности или предложения — пиши: {config.email}",
                                  reply_markup=keyboard)
