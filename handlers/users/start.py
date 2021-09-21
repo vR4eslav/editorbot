@@ -3,8 +3,10 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 from aiogram.types import CallbackQuery
 
 from loader import dp
+from utils.misc import rate_limit
 
 
+@rate_limit(10, 'start')
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
     keyboard = types.InlineKeyboardMarkup()
