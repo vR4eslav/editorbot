@@ -38,9 +38,17 @@ async def start_check_func(chat_id, message_id):
                                 reply_markup=keyboard_cancel)
 
 
+async def start_check_func_from_msg(chat_id):
+    await bot.send_message(chat_id=chat_id,
+                           text=f'📝Отправьте мне текст, который вы хотите проверить на ошибки'
+                                f'(не более <b>4096</b> символов!)\n\n'
+                                f'Пока что бот может проверить только текст на русском языке',
+                           reply_markup=keyboard_cancel)
+
+
 @dp.message_handler(Command('check_spelling'))
 async def start_check(message: types.Message):
-    await start_check_func(chat_id=message.from_user.id, message_id=message.message_id)
+    await start_check_func_from_msg(chat_id=message.from_user.id)
 
     await CheckText.stage1.set()
 
@@ -55,22 +63,29 @@ async def start_check(call: CallbackQuery):
 @dp.message_handler(state=CheckText.stage1)
 async def start_check(message: types.Message, state: FSMContext):
     text = message.text
-    text_dict = text.split()
+    text_dict = []
+    text_dict_dict = text.split()
+    for i in text_dict_dict:
+        text_dict.append(i.lower())
     logger.info(text_dict)
     normal_text = []
     errors = []
     try:
         await text_checker(text_dict=text_dict, normal_text=normal_text, errors=errors)
-    except MessageIsTooLong:
+    except:
         await state.reset_state()
-    if len(errors) > 0:
-        errors = "\n".join(errors)
-        await message.reply(f'⚠️<b>Ошибки: </b>⚠️ \n\n<code>{errors}</code>. \n\nЧто нужно сделать еще?',
-                            reply_markup=text_actions_keyboard)
-    elif len(errors) <= 0:
-        await message.reply(f'☑️Ошибок нет! Ура! \n\nЧто нужно сделать еще?',
-                            reply_markup=text_actions_keyboard)
-    await state.reset_state()
+    try:
+        if len(errors) > 0:
+            errors = "\n".join(errors)
+            await message.reply(f'⚠️<b>Ошибки: </b>⚠️ \n\n<code>{errors}</code> \n\nЧто нужно сделать еще?',
+                                reply_markup=text_actions_keyboard)
+        elif len(errors) <= 0:
+            await message.reply(f'☑️Ошибок нет! Ура! \n\nЧто нужно сделать еще?',
+                                reply_markup=text_actions_keyboard)
+            await state.reset_state()
+    except:
+        await message.reply(f'🆘 Неизвестная ошибка!🆘 ', reply_markup=text_actions_keyboard)
+        await state.reset_state()
 
 
 @dp.callback_query_handler(state=CheckText.stage1, text='cancel')
@@ -79,4 +94,3 @@ async def cancel_check_spelling1(call: CallbackQuery, state: FSMContext):
                                 text=f'❗️Вы отменили проверку орфографии! Что вы хотите сделать еще?',
                                 reply_markup=text_actions_keyboard)
     await state.reset_state()
-
