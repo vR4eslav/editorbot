@@ -18,9 +18,16 @@ async def start_counting(chat_id, message_id):
                                 reply_markup=keyboard_cancel)
 
 
+async def start_counting_from_msg(chat_id):
+    await bot.send_message(chat_id=chat_id,
+                           text=f'📝Отправьте текст, и я посчитаю, сколько в нем слов!\n\n'
+                                f'<b>Не больше 4096 символов!</b>',
+                           reply_markup=keyboard_cancel)
+
+
 @dp.message_handler(Command('count_words'))
 async def start_counting_message(message: types.Message):
-    await start_counting(chat_id=message.from_user.id, message_id=message.message_id)
+    await start_counting_from_msg(chat_id=message.from_user.id)
     await Counter.stage1.set()
 
 
@@ -47,4 +54,3 @@ async def cancel_count(call: CallbackQuery, state: FSMContext):
                                 text=f'❗️Вы отменили подсчет символов! Что вы хотите сделать еще?',
                                 reply_markup=text_actions_keyboard)
     await state.reset_state()
-
