@@ -9,9 +9,6 @@ from loader import dp, bot
 from states.change_register_states import ChangeRegister
 
 
-# data = await state.get_data()
-# answer1 = float(data.get('mass'))
-
 async def start_changing(chat_id, message_id):
     await bot.edit_message_text(chat_id=chat_id, message_id=message_id,
                                 text=f"📝Отправь сообщение для смены регистра, не более <b>4096</b> символов! Если "
@@ -19,9 +16,16 @@ async def start_changing(chat_id, message_id):
                                      f"разделите текст на несколько сообщений. ", reply_markup=keyboard_cancel)
 
 
+async def start_changing_from_msg(chat_id):
+    await bot.send_message(chat_id=chat_id,
+                           text=f"📝Отправь сообщение для смены регистра, не более <b>4096</b> символов! Если "
+                                f"символов больше, "
+                                f"разделите текст на несколько сообщений. ", reply_markup=keyboard_cancel)
+
+
 @dp.message_handler(Command('change_register'))
 async def change_register_start_message(message: types.Message):
-    await start_changing(chat_id=message.from_user.id, message_id=message.message_id)
+    await start_changing_from_msg(chat_id=message.from_user.id)
     await ChangeRegister.stage1.set()
 
 
