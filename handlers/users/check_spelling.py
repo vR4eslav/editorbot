@@ -79,11 +79,10 @@ async def start_check(message: types.Message, state: FSMContext):
             errors = "\n".join(errors)
             await message.reply(f'⚠️<b>Ошибки: </b>⚠️ \n\n<code>{errors}</code> \n\nЧто нужно сделать еще?',
                                 reply_markup=text_actions_keyboard)
-            await state.reset_state()
         elif len(errors) <= 0:
             await message.reply(f'☑️Ошибок нет! Ура! \n\nЧто нужно сделать еще?',
                                 reply_markup=text_actions_keyboard)
-            await state.reset_state()
+        await state.reset_state()
     except:
         await message.reply(f'🆘 Неизвестная ошибка!🆘 ', reply_markup=text_actions_keyboard)
         await state.reset_state()
