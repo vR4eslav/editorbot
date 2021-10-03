@@ -5,3 +5,4 @@ uuid~=1.30
 setuptools~=41.2.0
 pyenchant~=3.2.1
 loguru
+
