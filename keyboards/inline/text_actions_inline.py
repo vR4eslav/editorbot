@@ -9,6 +9,8 @@ btn4 = types.InlineKeyboardButton(text='🔁 Поменять регистр �
 text_actions_keyboard.row(btn3, btn4)
 btn5 = types.InlineKeyboardButton(text='🔑 Сгенерировать надежный пароль 🔑', callback_data='generate_password')
 text_actions_keyboard.add(btn5)
-btn8 = types.InlineKeyboardButton(text='🔙 НАЗАД В МЕНЮ 🔙', callback_data='back_to_menu')
-text_actions_keyboard.add(btn8)
+btn6 = types.InlineKeyboardButton(text='✒️ Сделать рукописный текст ✒️', callback_data='text_to_hand')
+text_actions_keyboard.add(btn6)
+btn9 = types.InlineKeyboardButton(text='🔙 НАЗАД В МЕНЮ 🔙', callback_data='back_to_menu')
+text_actions_keyboard.add(btn9)
 
