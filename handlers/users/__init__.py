@@ -8,4 +8,8 @@ from . import count_words
 from . import count_symbols
 from . import generate_password
 from . import about_bot
+from . import text_to_hand
+from . import admin
+from . import broadcast_handler
+from . import donation_alerts
 from . import echo
