@@ -12,7 +12,7 @@ async def set_default_commands(dp):
             types.BotCommand('check_spelling', 'Проверить текст на орфографические ошибки(RU)'),
             types.BotCommand('count_words', 'Посчитать слова в тексте(RU-EN)'),
             types.BotCommand('count_symbols', 'Посчитать символы'),
-            types.BotCommand('generate_password', 'Сгенерировать пароль'),
-            types.BotCommand('text_to_hand', 'Создать рукописный текст')
+            types.BotCommand('generate_password', 'Сгенерировать пароль')
+            # types.BotCommand('text_to_hand', 'Создать рукописный текст')
         ]
     )
