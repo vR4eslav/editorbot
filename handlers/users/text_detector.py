@@ -14,7 +14,7 @@ from keyboards.inline.text_actions_inline import text_actions_keyboard
 from loader import dp, bot
 
 # windows
-pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 
 async def text_downloader(message):
