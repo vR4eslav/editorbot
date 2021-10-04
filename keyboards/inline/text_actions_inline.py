@@ -11,6 +11,8 @@ btn5 = types.InlineKeyboardButton(text='🔑 Сгенерировать наде
 text_actions_keyboard.add(btn5)
 # btn6 = types.InlineKeyboardButton(text='✒️ Сделать рукописный текст ✒️', callback_data='text_to_hand')
 # text_actions_keyboard.add(btn6)
+btn7 = types.InlineKeyboardButton(text='🔥 ПЕРЕВЕСТИ ФОТО В ТЕКСТ(BETA) 🔥', callback_data='photo_to_text')
+text_actions_keyboard.add(btn7)
 btn9 = types.InlineKeyboardButton(text='🔙 НАЗАД В МЕНЮ 🔙', callback_data='back_to_menu')
 text_actions_keyboard.add(btn9)
 

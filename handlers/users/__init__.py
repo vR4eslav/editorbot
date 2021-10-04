@@ -12,4 +12,5 @@ from . import about_bot
 from . import admin
 from . import broadcast_handler
 from . import donation_alerts
+from . import text_detector
 from . import echo
