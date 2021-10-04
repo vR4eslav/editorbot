@@ -61,7 +61,7 @@ async def process_convert(message: types.Message, state: FSMContext):
     try:
         photo = await text_downloader(message=message)
         text = await text_detector(photo=photo)
-        await message.edit_text(text=f'☑️ Ваш текст: \n\n'
+        await message.answer(text=f'☑️ Ваш текст: \n\n'
                                      f'{text}\n\n'
                                      f'Что нужно сделать еще?', parse_mode="", reply_markup=text_actions_keyboard)
         os.remove(photo)
