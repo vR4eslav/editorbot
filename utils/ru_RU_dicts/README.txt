@@ -41,4 +41,9 @@ Copy the first line "deb http://archive.ubuntu.com/ubuntu bionic main" and paste
 If you are using a different release of ubuntu, then replace bionic with the respective release name.
 
 deb http://archive.ubuntu.com/ubuntu bionic universe
+
++ for linux
+RUN apt-get update ##[edited]
+RUN apt-get install ffmpeg libsm6 libxext6  -y
+for docker
 ________________________________________________

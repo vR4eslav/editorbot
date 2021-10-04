@@ -13,6 +13,7 @@ from keyboards.inline.cancel_keyboard_inline import keyboard_cancel
 from keyboards.inline.text_actions_inline import text_actions_keyboard
 from loader import dp, bot
 
+
 # windows
 # pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
@@ -60,12 +61,19 @@ async def process_convert(message: types.Message, state: FSMContext):
     try:
         photo = await text_downloader(message=message)
         text = await text_detector(photo=photo)
-        await message.answer(text=f'☑️ Ваш текст: \n\n'
-                                  f'{text}\n\n'
-                                  f'Что нужно сделать еще?', parse_mode="", reply_markup=text_actions_keyboard)
+        await message.edit_text(text=f'☑️ Ваш текст: \n\n'
+                                     f'{text}\n\n'
+                                     f'Что нужно сделать еще?', parse_mode="", reply_markup=text_actions_keyboard)
         os.remove(photo)
     except:
         await message.answer(text=f'📛Произошла неизвестная ошибка! Мы уже отправили очет разработчикам.\n\n'
                                   f'Попробуйте отправить фотографию <b>не документом</b>',
                              reply_markup=text_actions_keyboard)
+    await state.reset_state()
+
+
+@dp.callback_query_handler(text='cancel', state='image_convert')
+async def cancel_convert(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_text(text=f'❗️Вы отменили перевод текста в фото! Что вы хотите сделать еще?',
+                                 reply_markup=text_actions_keyboard)
     await state.reset_state()
