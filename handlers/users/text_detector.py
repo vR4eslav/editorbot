@@ -15,7 +15,7 @@ from loader import dp, bot, _
 
 
 # windows
-pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 
 async def text_downloader(message):
