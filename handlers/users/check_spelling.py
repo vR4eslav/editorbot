@@ -10,7 +10,7 @@ from loguru import logger
 
 from keyboards.inline.cancel_keyboard_inline import keyboard_cancel
 from keyboards.inline.text_actions_inline import text_actions_keyboard
-from loader import dp, bot
+from loader import dp, bot, _
 from states.check_text_states import CheckText
 
 checker = enchant.Dict('ru_RU')
@@ -32,18 +32,18 @@ async def text_checker(text_dict, normal_text, errors):
 
 async def start_check_func(chat_id, message_id):
     await bot.edit_message_text(chat_id=chat_id, message_id=message_id,
-                                text=f'📝Отправьте мне текст, который вы хотите проверить на ошибки'
-                                     f'(не более <b>4096</b> символов!)\n\n'
-                                     f'Пока что бот может проверить только текст на русском языке',
-                                reply_markup=keyboard_cancel)
+                                text=_('📝Отправьте мне текст, который вы хотите проверить на ошибки '
+                                       'не более <b>4096</b> символов!\n\n'
+                                       'Пока что бот может проверить только текст на русском языке'),
+                                reply_markup=await keyboard_cancel())
 
 
 async def start_check_func_from_msg(chat_id):
     await bot.send_message(chat_id=chat_id,
-                           text=f'📝Отправьте мне текст, который вы хотите проверить на ошибки'
-                                f'(не более <b>4096</b> символов!)\n\n'
-                                f'Пока что бот может проверить только текст на русском языке',
-                           reply_markup=keyboard_cancel)
+                           text=_('📝Отправьте мне текст, который вы хотите проверить на ошибки'
+                                  '(не более <b>4096</b> символов!)\n\n'
+                                  'Пока что бот может проверить только текст на русском языке'),
+                           reply_markup=await keyboard_cancel())
 
 
 @dp.message_handler(Command('check_spelling'))
@@ -74,24 +74,25 @@ async def start_check(message: types.Message, state: FSMContext):
         await text_checker(text_dict=text_dict, normal_text=normal_text, errors=errors)
     except:
         await state.reset_state()
-    try:
-        if len(errors) > 0:
-            errors = "\n".join(errors)
-            await message.reply(f'⚠️<b>Ошибки: </b>⚠️ \n\n<code>{errors}</code> \n\nЧто нужно сделать еще?',
-                                reply_markup=text_actions_keyboard)
-        elif len(errors) <= 0:
-            await message.reply(f'☑️Ошибок нет! Ура! \n\nЧто нужно сделать еще?',
-                                reply_markup=text_actions_keyboard)
-        await state.reset_state()
+    # try:
+    if len(errors) > 0:
+        errors = "\n".join(errors)
+        await message.reply(
+            _('⚠️<b>Ошибки: </b>⚠️ \n\n<code>{errors}</code> \n\nЧто нужно сделать еще?').format(errors=errors),
+            reply_markup=await text_actions_keyboard())
+    elif len(errors) <= 0:
+        await message.reply(_('☑️Ошибок нет! Ура! \n\nЧто нужно сделать еще?'),
+                            reply_markup=await text_actions_keyboard())
+    await state.reset_state()
 
-    except:
-        await message.reply(f'🆘 Неизвестная ошибка!🆘 ', reply_markup=text_actions_keyboard)
-        await state.reset_state()
+    # except:
+    #     await message.reply(_('🆘 Неизвестная ошибка!🆘 '), reply_markup=text_actions_keyboard)
+    #     await state.reset_state()
 
 
 @dp.callback_query_handler(state=CheckText.stage1, text='cancel')
 async def cancel_check_spelling1(call: CallbackQuery, state: FSMContext):
     await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                text=f'❗️Вы отменили проверку орфографии! Что вы хотите сделать еще?',
-                                reply_markup=text_actions_keyboard)
+                                text=_('❗️Вы отменили проверку орфографии! Что вы хотите сделать еще?'),
+                                reply_markup=await text_actions_keyboard())
     await state.reset_state()

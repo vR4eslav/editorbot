@@ -1,4 +1,5 @@
 from environs import Env
+from pathlib import Path
 from glQiwiApi import QiwiWrapper
 # Теперь используем вместо библиотеки python-dotenv библиотеку environs
 env = Env()
@@ -17,6 +18,10 @@ DB_USER = env.str('DB_USER')
 DB_PASS = env.str('DB_PASS')
 DB_HOST = env.str('DB_HOST')
 DB_NAME = env.str('DB_NAME')
+
+I18N_DOMAIN = "mybot"
+BASE_DIR = Path(__file__).parent
+LOCALES_DIR = "locales"  # тут хранятся переводы
 
 wallet = QiwiWrapper(secret_p2p="YOUR_SECRET_P2P_TOKEN")
 

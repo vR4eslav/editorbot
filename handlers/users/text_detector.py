@@ -11,11 +11,11 @@ from aiogram.types import ContentType, CallbackQuery
 
 from keyboards.inline.cancel_keyboard_inline import keyboard_cancel
 from keyboards.inline.text_actions_inline import text_actions_keyboard
-from loader import dp, bot
+from loader import dp, bot, _
 
 
 # windows
-# pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 
 async def text_downloader(message):
@@ -39,20 +39,20 @@ async def text_detector(photo):
 @dp.callback_query_handler(text='photo_to_text')
 async def start_converting(call: CallbackQuery, state: FSMContext):
     await call.message.edit_text(
-        text='💾Отправьте мне фото, которое нужно конвертировать в текст! Нейросеть постарается это '
-             'сделать\n'
-             'Вы можете присылать код программы, рукописный текст, а также скриншоты текста с '
-             'разных сайтов', reply_markup=keyboard_cancel)
+        text=_('💾Отправьте мне фото, которое нужно конвертировать в текст! Нейросеть постарается это '
+               'сделать\n'
+               'Вы можете присылать код программы, рукописный текст, а также скриншоты текста с '
+               'разных сайтов'), reply_markup=await keyboard_cancel())
     await state.set_state('image_convert')
 
 
 @dp.message_handler(Command('photo_to_text'))
 async def start_converting(message: types.Message, state: FSMContext):
     await bot.send_message(chat_id=message.from_user.id,
-                           text='Отправьте мне фото, которое нужно конвертировать в текст! Нейросеть постарается это '
-                                'сделать\n'
-                                'Вы можете присылать код программы, рукописный текст, а также скриншоты текста с '
-                                'разных сайтов', reply_markup=keyboard_cancel)
+                           text=_('Отправьте мне фото, которое нужно конвертировать в текст! Нейросеть постарается это '
+                                  'сделать\n'
+                                  'Вы можете присылать код программы, рукописный текст, а также скриншоты текста с '
+                                  'разных сайтов'), reply_markup=await keyboard_cancel())
     await state.set_state('image_convert')
 
 
@@ -61,19 +61,20 @@ async def process_convert(message: types.Message, state: FSMContext):
     try:
         photo = await text_downloader(message=message)
         text = await text_detector(photo=photo)
-        await message.answer(text=f'☑️ Ваш текст: \n\n'
-                                     f'{text}\n\n'
-                                     f'Что нужно сделать еще?', parse_mode="", reply_markup=text_actions_keyboard)
+        await message.answer(text=_('☑️ Ваш текст: \n\n'
+                                    '{text}\n\n'
+                                    'Что нужно сделать еще?').format(text=text), parse_mode="",
+                             reply_markup=await text_actions_keyboard())
         os.remove(photo)
     except:
-        await message.answer(text=f'📛Произошла неизвестная ошибка! Мы уже отправили очет разработчикам.\n\n'
+        await message.answer(text=f'ERROR! Мы уже отправили очет разработчикам.\n\n'
                                   f'Попробуйте отправить фотографию <b>не документом</b>',
-                             reply_markup=text_actions_keyboard)
+                             reply_markup=await text_actions_keyboard())
     await state.reset_state()
 
 
 @dp.callback_query_handler(text='cancel', state='image_convert')
 async def cancel_convert(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_text(text=f'❗️Вы отменили перевод текста в фото! Что вы хотите сделать еще?',
-                                 reply_markup=text_actions_keyboard)
+    await call.message.edit_text(text=_('❗️Вы отменили перевод текста в фото! Что вы хотите сделать еще?'),
+                                 reply_markup=await text_actions_keyboard())
     await state.reset_state()

@@ -47,6 +47,7 @@ class Database:
         username varchar(255) NULL,
         email varchar(255) NULL,
         is_premium bool NULL,
+        locale varchar(100) NULL,
         telegram_id BIGINT NOT NULL UNIQUE 
         );
         """
@@ -60,10 +61,10 @@ class Database:
         ])
         return sql, tuple(parameters.values())
 
-    async def add_user(self, full_name, username, telegram_id, email=None, is_premium=None):
-        sql = "INSERT INTO users (full_name, username, telegram_id, email, is_premium) " \
-              "VALUES($1, $2, $3, $4, $5) returning *"
-        return await self.execute(sql, full_name, username, telegram_id, email, is_premium,
+    async def add_user(self, full_name, username, telegram_id, email=None, is_premium=None, locale='en'):
+        sql = "INSERT INTO users (full_name, username, telegram_id, email, is_premium, locale) " \
+              "VALUES($1, $2, $3, $4, $5, $6) returning *"
+        return await self.execute(sql, full_name, username, telegram_id, email, is_premium, locale,
                                   fetchrow=True)
 
     async def select_all_users(self):
@@ -94,6 +95,10 @@ class Database:
     async def update_user_is_premium(self, is_premium, telegram_id):
         sql = "UPDATE Users SET is_premium=$1 WHERE telegram_id=$2"
         return await self.execute(sql, is_premium, telegram_id, execute=True)
+
+    async def update_user_locale(self, locale, telegram_id):
+        sql = "UPDATE Users SET locale=$1 WHERE telegram_id=$2"
+        return await self.execute(sql, locale, telegram_id, execute=True)
 
     async def delete_users(self):
         await self.execute("DELETE FROM Users WHERE TRUE", execute=True)

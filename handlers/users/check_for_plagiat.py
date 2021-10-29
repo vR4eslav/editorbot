@@ -4,7 +4,7 @@ from aiogram.dispatcher.filters import Command
 from antiplagiat import Antiplagiat
 
 from data.config import ADVEGO_TOKEN
-from loader import dp
+from loader import dp, _
 
 api = Antiplagiat(ADVEGO_TOKEN)
 
@@ -27,7 +27,7 @@ async def antiplagiator(text):
 
 @dp.message_handler(Command('plagiat'))
 async def plagiat_check_start(message: types.Message, state: FSMContext):
-    await message.answer(f'Пришлите текст для проверки на плагиат! Не больше 4096 символов')
+    await message.answer(_('Пришлите текст для проверки на плагиат! Не больше 4096 символов'))
     await state.set_state('process_plagiat')
 
 

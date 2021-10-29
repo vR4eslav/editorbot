@@ -4,7 +4,7 @@ from aiogram.types import CallbackQuery
 from asyncpg import UniqueViolationError
 
 from keyboards.inline.text_actions_inline import text_actions_keyboard
-from loader import dp, bot, db
+from loader import dp, bot, db, _
 from states.text_info_states import TextInfo
 
 
@@ -16,8 +16,8 @@ async def text_info_message_msg(message: types.Message):
                           telegram_id=message.from_user.id)
     except UniqueViolationError:
         pass
-    await message.answer('✏️ Что нужно узнать о тексте? ✏️',
-                         reply_markup=text_actions_keyboard)
+    await message.answer(_('✏️ Что нужно узнать о тексте? ✏️'),
+                         reply_markup=await text_actions_keyboard())
 
 
 @dp.callback_query_handler(text='menu')
@@ -29,8 +29,8 @@ async def text_info_message_cq(call: CallbackQuery):
     except UniqueViolationError:
         pass
     await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                text=f'✏️ Что нужно узнать о тексте? ✏️',
-                                reply_markup=text_actions_keyboard)
+                                text=_('✏️ Что нужно узнать о тексте? ✏️'),
+                                reply_markup=await text_actions_keyboard())
 
 
 @dp.callback_query_handler(text='back_to_menu_from_file')
@@ -42,5 +42,5 @@ async def text_info_message_cq(call: CallbackQuery):
     except UniqueViolationError:
         pass
     await call.message.delete()
-    await call.message.answer(text=f'✏️ Что нужно узнать о тексте? ✏️',
-                              reply_markup=text_actions_keyboard)
+    await call.message.answer(text=_('✏️ Что нужно узнать о тексте? ✏️'),
+                              reply_markup=await text_actions_keyboard())

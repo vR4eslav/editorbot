@@ -1,5 +1,10 @@
 from aiogram import types
+from loader import _
 
-keyboard_cancel = types.InlineKeyboardMarkup()
-btn1 = types.InlineKeyboardButton(text='❌ Отмена ❌', callback_data='cancel')
-keyboard_cancel.add(btn1)
+
+async def keyboard_cancel():
+    markup = types.InlineKeyboardMarkup()
+    btn1 = types.InlineKeyboardButton(text=_('❌ Отмена ❌'), callback_data='cancel')
+    markup.add(btn1)
+
+    return markup
