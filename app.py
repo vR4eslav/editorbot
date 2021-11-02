@@ -15,7 +15,6 @@ async def on_startup(dispatcher):
     # Уведомляет про запуск
     await on_startup_notify(dispatcher)
     await db.create()
-    await db.drop_users()
     await db.create_table_users()
 if __name__ == '__main__':
     executor.start_polling(dp, on_startup=on_startup)
